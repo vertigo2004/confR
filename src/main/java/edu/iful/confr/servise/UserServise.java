@@ -18,7 +18,7 @@ public class UserServise {
 
         return userRepository
                 .findById(email)
-                .orElseThrow(() -> new DuplicatedUserException(email));
+                .orElseThrow(() -> new NotExistedUserException(email));
     }
 
     public List<User> getAll() {
@@ -27,7 +27,6 @@ public class UserServise {
     }
 
     public User createUser(User user) {
-
         if (isExist(user.getEmail())) {
             throw new DuplicatedUserException(user.getEmail());
         }
@@ -35,6 +34,7 @@ public class UserServise {
             int at = user.getEmail().indexOf("@");
             user.setNickname(user.getEmail().substring(0, at));
         }
+
         return userRepository.save(user);
     }
 
@@ -49,5 +49,13 @@ class DuplicatedUserException extends IllegalStateException {
     public DuplicatedUserException(String email) {
 
         super("User with email: "+ email +" exists already.");
+    }
+}
+
+class NotExistedUserException extends IllegalStateException {
+
+    public NotExistedUserException(String email) {
+
+        super("User with email: "+ email +" does not exist.");
     }
 }
