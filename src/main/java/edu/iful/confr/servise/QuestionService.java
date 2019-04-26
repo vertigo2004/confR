@@ -2,51 +2,57 @@ package edu.iful.confr.servise;
 
 import edu.iful.confr.domain.Question;
 import edu.iful.confr.domain.User;
+import edu.iful.confr.dto.QuestionDto;
 import edu.iful.confr.repository.QuestionRepository;
 import edu.iful.confr.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class QuestionService {
+public class QuestionService implements IQuestionService {
 
     @Autowired
     private QuestionRepository questionRepository;
     @Autowired
     private UserRepository userRepository;
 
-    public Question getOne(Long id) {
+    public QuestionDto getOne(Long id) {
 
-        return questionRepository.findById(id).get();
+        return QuestionMapper.toDto(questionRepository.findById(id).get());
     }
 
-    public List<Question> getAll() {
+    public List<QuestionDto> getAll() {
 
-        return questionRepository.findAll();
+        return QuestionMapper.toDto(questionRepository.findAll());
     }
 
-    public List<Question> getAll4User(User user) {
+    public List<QuestionDto> getAll4User(User user) {
 
         List<Question> all = questionRepository.findAll();
-        all.forEach(q -> q.isLikedBy(user));
 
-        return all;
+        return all.stream().map(q -> {
+            QuestionDto dto = QuestionMapper.toDto(q);
+            dto.setLiked(q.isLikedBy(user));
+            return dto;
+        }).collect(Collectors.toList());
     }
 
-    public Question create(Question question) {
+    public QuestionDto create(QuestionDto dto) {
 
+        Question question = QuestionMapper.toEntity(dto);
         question.like(question.getAuthor());
 
-        return questionRepository.save(question);
+        return QuestionMapper.toDto(questionRepository.save(question));
     }
 
-    public Question like(Long questionId, User user) {
+    public QuestionDto like(Long questionId, User user) {
 
         Question question = questionRepository.getOne(questionId);
         question.like(user);
 
-        return questionRepository.save(question);
+        return QuestionMapper.toDto(questionRepository.save(question));
     }
 }

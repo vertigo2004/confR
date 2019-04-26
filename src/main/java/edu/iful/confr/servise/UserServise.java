@@ -18,7 +18,8 @@ public class UserServise {
 
         return userRepository
                 .findById(email)
-                .orElseThrow(() -> new NotExistedUserException(email));
+                .orElseThrow(
+                        () -> new NotExistedUserException(email));
     }
 
     public List<User> getAll() {
@@ -41,21 +42,5 @@ public class UserServise {
     public boolean isExist(String email) {
 
         return userRepository.findById(email).isPresent();
-    }
-}
-
-class DuplicatedUserException extends IllegalStateException {
-
-    public DuplicatedUserException(String email) {
-
-        super("User with email: "+ email +" exists already.");
-    }
-}
-
-class NotExistedUserException extends IllegalStateException {
-
-    public NotExistedUserException(String email) {
-
-        super("User with email: "+ email +" does not exist.");
     }
 }
