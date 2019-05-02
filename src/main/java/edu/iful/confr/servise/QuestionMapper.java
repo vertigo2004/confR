@@ -1,6 +1,7 @@
 package edu.iful.confr.servise;
 
 import edu.iful.confr.domain.Question;
+import edu.iful.confr.domain.Topic;
 import edu.iful.confr.dto.QuestionDto;
 import lombok.experimental.UtilityClass;
 
@@ -32,7 +33,11 @@ public final class QuestionMapper {
         question.setId(dto.getId());
         question.setAuthor(dto.getAuthor());
         question.setBody(dto.getBody());
-        question.setRate(dto.getRate());
+        question.setTopic(new Topic());
+        question.getTopic().setId(dto.getTopicId());
+        if (dto.getRate() != null) {
+            question.setRate(dto.getRate());
+        }
 
         return question;
     }

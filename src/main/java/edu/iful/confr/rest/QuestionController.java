@@ -6,6 +6,7 @@ import edu.iful.confr.servise.UserServise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,10 +36,10 @@ public class QuestionController {
         return questionService.getAll();
     }
 
-    @GetMapping("check-liked/{email}")
-    public List<QuestionDto> getAll4User(@PathVariable String email) {
-
-        return questionService.getAll4User(userServise.getByEmail(email));
+    @GetMapping("{topicId}/liked/{email}")
+    public List<QuestionDto> getByTopic4User(@PathVariable Long topicId,
+                                             @PathVariable String email) {
+        return questionService.getAllByTopic4User(topicId, userServise.getByEmail(email));
     }
 
     @PutMapping("{id}/like")
@@ -46,5 +47,11 @@ public class QuestionController {
                             @RequestBody String email) {
 
         return questionService.like(id, userServise.getByEmail(email));
+    }
+
+    @PostMapping
+    public QuestionDto create(@RequestBody QuestionDto question) {
+
+        return questionService.create(question);
     }
 }

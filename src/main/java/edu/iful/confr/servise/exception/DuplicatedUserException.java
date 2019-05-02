@@ -1,4 +1,4 @@
-package edu.iful.confr.servise;
+package edu.iful.confr.servise.exception;
 
 public class DuplicatedUserException extends IllegalStateException {
 

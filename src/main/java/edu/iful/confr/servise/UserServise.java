@@ -2,6 +2,8 @@ package edu.iful.confr.servise;
 
 import edu.iful.confr.domain.User;
 import edu.iful.confr.repository.UserRepository;
+import edu.iful.confr.servise.exception.DuplicatedUserException;
+import edu.iful.confr.servise.exception.NotExistedUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
